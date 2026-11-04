@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="교과 9 · 10일차: 제조 문자 OCR 검사 웹 대시보드">
+  <title>제조 문자 OCR 검사 | Machine Vision Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="page-header">
+      <div class="brand-line"><span class="brand-icon" aria-hidden="true">▣</span><span>VISION AI · 교과 9 / 10일차</span></div>
+      <div class="heading-row">
+        <div>
+          <h1>제조 문자 OCR 검사 대시보드</h1>
+          <p class="subtitle">제품 이미지에서 일련번호(SN)를 읽고, 13자리 형식과 기준 번호를 검사합니다.</p>
+        </div>
+        <div id="serverStatus" class="server-status checking" role="status" aria-live="polite">● 서버 확인 중</div>
+      </div>
+    </header>
+
+    <section class="how-it-works" aria-label="검사 처리 과정">
+      <span class="how-label">검사 과정</span>
+      <ol class="flow-list">
+        <li><span class="flow-num">1</span><span>제품 이미지 선택</span></li>
+        <li><span class="flow-num">2</span><span>SN 문자 OCR 인식</span></li>
+        <li><span class="flow-num">3</span><span>형식·기준 번호 비교</span></li>
+        <li><span class="flow-num">4</span><span>OK / NG 판정·기록</span></li>
+      </ol>
+    </section>
+
+    <div id="notice" class="notice" role="alert" hidden></div>
+
+    <main>
+      <div class="workspace">
+        <section class="card input-card" aria-labelledby="inputHeading">
+          <div class="card-title-row">
+            <div>
+              <div class="eyebrow">STEP 01 · 검사 대상</div>
+              <h2 id="inputHeading">검사할 제품 이미지 선택</h2>
+            </div>
+            <span class="tag neutral">기존 샘플 검사</span>
+          </div>
+          <p class="helper">6일차에서 준비한 제품 이미지를 선택합니다. 이미지는 서버에 저장되어 있으며 새로운 파일을 업로드하지 않습니다.</p>
+          <label for="sampleSelect" class="field-label">검사 이미지 파일</label>
+          <div class="controls">
+            <select id="sampleSelect" aria-describedby="fileHelp"><option value="">제품 목록을 불러오는 중…</option></select>
+            <button id="inspectButton" type="button" class="primary-button" disabled>선택 이미지 검사</button>
+          </div>
+          <p id="fileHelp" class="field-help">이미지를 선택한 뒤 검사 버튼을 누르세요.</p>
+          <figure class="preview-area">
+            <div class="preview-box">
+              <div id="previewPlaceholder" class="preview-placeholder">이미지를 선택하면 이곳에 표시됩니다.</div>
+              <img id="previewImage" alt="선택한 검사 제품 이미지" hidden>
+            </div>
+            <figcaption id="selectedFileName">선택된 이미지 없음</figcaption>
+          </figure>
+          <div class="info-note"><strong>검사 대상</strong><span>인쇄된 SN(일련번호) · Tesseract OCR · 6일차 확정 검사 규칙(Frozen Rule)</span></div>
+        </section>
+
+        <section class="card result-card" aria-labelledby="resultHeading">
+          <div class="card-title-row">
+            <div>
+              <div class="eyebrow">STEP 02 · 검사 결과</div>
+              <h2 id="resultHeading">OCR 검사 판정</h2>
+            </div>
+            <span class="tag accent">문자·코드 검사</span>
+          </div>
+          <div id="finalResult" class="decision waiting" role="status" aria-live="polite">
+            <span class="decision-symbol" id="decisionSymbol" aria-hidden="true">…</span>
+            <div><strong id="decisionTitle">검사 대기</strong><p id="decisionDescription">검사할 제품을 선택하고 버튼을 누르세요.</p></div>
+          </div>
+
+          <div class="comparison">
+            <div class="comparison-item">
+              <span>실제 OCR 인식값</span>
+              <strong id="ocrText" class="mono">-</strong>
+              <small>선택한 이미지의 SN 영역에서 읽은 값</small>
+            </div>
+            <div class="compare-sign" aria-hidden="true">↔</div>
+            <div class="comparison-item">
+              <span>기준 번호 (Expected)</span>
+              <strong id="expectedText" class="mono">-</strong>
+              <small>해당 제품에 인쇄되어 있어야 하는 값</small>
+            </div>
+          </div>
+
+          <div class="checks">
+            <div class="check-line"><span>① 13자리 숫자 형식 검사</span><strong id="patternStatus" class="check-status pending">검사 전</strong></div>
+            <div class="check-line"><span>② OCR 값과 기준 번호 비교</span><strong id="matchStatus" class="check-status pending">검사 전</strong></div>
+          </div>
+          <div class="reason-box"><span class="section-caption">최종 판정 이유</span><p id="reasonText">검사 완료 후 판정 이유가 표시됩니다.</p><small id="reasonCode" class="reason-code"></small></div>
+          <details class="metadata">
+            <summary>검사 추적 정보 보기 (버전 · 요청 번호)</summary>
+            <dl>
+              <div><dt>OCR 검사 규칙 버전</dt><dd id="ruleVersion">-</dd></div>
+              <div><dt>서비스 버전</dt><dd id="serviceVersion">-</dd></div>
+              <div><dt>요청 ID</dt><dd id="requestId">-</dd></div>
+              <div><dt>검사 시간</dt><dd id="inspectedAt">-</dd></div>
+            </dl>
+          </details>
+        </section>
+      </div>
+
+      <section class="card stats-card" aria-labelledby="statsHeading">
+        <div class="card-title-row"><div><div class="eyebrow">STEP 03 · 검사 기록</div><h2 id="statsHeading">저장된 검사 통계</h2></div><span class="tag neutral">최근 저장된 기록 기준</span></div>
+        <div class="stats">
+          <div class="stat total"><span>누적 검사 횟수</span><strong id="totalCount">0</strong><small>검사 버튼을 실행한 횟수</small></div>
+          <div class="stat ok"><span>정상 (OK)</span><strong id="okCount">0</strong><small>두 검사 조건 모두 통과</small></div>
+          <div class="stat ng"><span>불량 (NG)</span><strong id="ngCount">0</strong><small>하나 이상 조건 불일치</small></div>
+        </div>
+        <div class="ratio-row"><span>저장 기록 중 OK 비율</span><strong id="okRate">-</strong></div>
+        <div class="ratio-track" aria-hidden="true"><div id="okRateFill"></div></div>
+        <p class="metric-note">※ 이 비율은 저장된 검사 결과 중 OK의 비율이며, OCR 인식 정확도나 모델 성능지표가 아닙니다. 통계는 날짜 구분 없이 서버에 보관된 최근 검사 기록을 기준으로 합니다.</p>
+      </section>
+
+      <section class="card history-card" aria-labelledby="historyHeading">
+        <div class="card-title-row"><div><div class="eyebrow">STEP 04 · 이력 추적</div><h2 id="historyHeading">최근 검사 이력</h2></div><span class="tag neutral">최근 10건</span></div>
+        <p class="helper">언제, 어떤 이미지를 검사했고, 왜 OK 또는 NG로 판정되었는지 확인할 수 있습니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">검사 시각</th><th scope="col">검사 파일</th><th scope="col">판정</th><th scope="col">판정 이유</th></tr></thead>
+            <tbody id="historyBody"><tr><td colspan="4" class="empty-table">검사 이력을 불러오는 중입니다.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">교과 9 · 10일차 | Day06 Frozen OCR Rule → FastAPI → Web Dashboard <a href="/docs" target="_blank" rel="noopener noreferrer">API 문서 (Swagger) ↗</a></footer>
+  </div>
+</body>
+</html>

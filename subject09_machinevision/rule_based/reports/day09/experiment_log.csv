@@ -1,0 +1,3 @@
+﻿timestamp,experiment_id,dataset_version,code_commit,changed_variable,old_value,new_value,homography_required,sift_good_matches_min,inlier_ratio_min,samples,accuracy,ng_precision,ng_recall,tp,tn,fp,fn
+2026-11-03T09:15:00,EXP-001,day05_calibration_v1,a0f0d18,none,,,True,129,0.8664,12,0.916667,0.857143,1.0,6,5,1,0
+2026-11-03T09:15:00,EXP-002,day05_calibration_v1,a0f0d18,inlier_ratio_min,0.8664,0.810811,True,129,0.810811,12,0.833333,0.833333,0.833333,5,5,1,1

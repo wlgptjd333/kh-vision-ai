@@ -1,0 +1,32 @@
+image,problem,method,parameter,improved,worse,next_inspection_helpful
+dark.jpg,dark,Brightness,beta=0,기준 이미지,전체가 어두워 병뚜껑 홈이 잘 안 보임,no
+dark.jpg,dark,Brightness,beta=20,병뚜껑 형태가 조금 더 잘 보임,변화가 작음,yes
+dark.jpg,dark,Brightness,beta=50,병뚜껑과 주변을 비교하기 쉬워짐,배경도 같은 양만큼 밝아짐,yes
+dark.jpg,dark,Brightness,beta=80,병뚜껑 홈이 가장 잘 보임,전체가 뿌옇게 보이고 투명 병 부분 세부가 약해짐,partly
+dark.jpg,dark,Gamma,gamma=0.6,없음,더 어두워져 병뚜껑이 거의 검게 보임,no
+dark.jpg,dark,Gamma,gamma=1.2,어두운 영역이 조금 밝아져 홈이 보이기 시작,변화가 작음,yes
+dark.jpg,dark,Gamma,gamma=1.5,어두운 병뚜껑 홈이 잘 보이고 밝은 영역은 덜 밝아짐(beta보다 덜 뿌옇다),배경도 조금 밝아짐,yes
+dark.jpg,dark,Gamma,gamma=2.0,가장 밝고 홈이 잘 보임,전체가 회색으로 들떠 보임,partly
+low_contrast.jpg,low contrast,CLAHE,clipLimit=1.0,병뚜껑 홈이 살아나기 시작,효과가 약함,yes
+low_contrast.jpg,low contrast,CLAHE,clipLimit=2.0,홈과 경계가 뚜렷해짐,배경 Texture가 보이기 시작,yes
+low_contrast.jpg,low contrast,CLAHE,clipLimit=3.0,홈이 강하게 강조됨,배경 Texture와 Noise도 함께 강조됨,partly
+low_contrast.jpg,low contrast,CLAHE,clipLimit=4.0,국소 대비가 가장 큼,배경 Texture가 지나치게 강조됨,no
+noise.jpg,gaussian + salt-pepper noise,Gaussian Blur,ksize=3,Noise가 조금 줄어듦,흰 점 Noise가 남음,partly
+noise.jpg,gaussian + salt-pepper noise,Gaussian Blur,ksize=7,Noise가 많이 줄어듦,병뚜껑 경계와 홈이 흐려짐,no
+noise.jpg,gaussian + salt-pepper noise,Median Blur,ksize=3,점 Noise가 대부분 사라지고 경계 유지,미세한 홈이 약간 약해짐,yes
+noise.jpg,gaussian + salt-pepper noise,Median Blur,ksize=7,가장 깨끗함,병뚜껑 홈이 거의 사라짐,partly
+noise.jpg,gaussian + salt-pepper noise,Bilateral Filter,d=9 sigma=75,경계를 유지하면서 표면 Noise 감소,흰 점(salt) Noise가 남음,partly
+blur.jpg,blur,Sharpening,3x3 kernel,흐린 홈과 경계가 다시 보임,경계 주변이 약간 거칠어짐,yes
+low_contrast.jpg,low contrast,Threshold,80,없음,전부 검은색(객체를 못 잡음),no
+low_contrast.jpg,low contrast,Threshold,120,병뚜껑이 흰색 객체로 분리됨,아래 링 일부가 끊김,yes
+low_contrast.jpg,low contrast,Threshold,160,없음,전부 흰색(배경까지 선택),no
+low_contrast.jpg,low contrast,Otsu,auto=118,값을 직접 정하지 않고 120 근처를 자동으로 찾음,아래 링 일부가 끊김,yes
+low_contrast.jpg,low contrast,Gaussian + Otsu,ksize=5 / auto=118,가장 깨끗한 병뚜껑 형태,경계가 약간 둥글어짐,yes
+low_contrast.jpg,low contrast,CLAHE + Otsu,clipLimit=2.0 / auto=132,병뚜껑 윗면은 잘 분리,아래 링에 점 Noise와 구멍이 생김,partly
+challenge.jpg,dim + bright background,Brightness,beta=40,없음(Otsu 값만 111→151),Binary가 원본과 완전히 같음,no
+challenge.jpg,dim + bright background,Gamma,gamma=1.5,Binary 조각 수 584→455,배경도 흰색으로 남음,no
+challenge.jpg,dim + bright background,Gamma,gamma=2.0,Binary 조각 수 584→295,배경도 흰색으로 남음,no
+challenge.jpg,dim + bright background,CLAHE,clipLimit=1.0,변화 거의 없음,변화 거의 없음,no
+challenge.jpg,dim + bright background,CLAHE,clipLimit=2.0,병뚜껑 홈이 강조됨,병뚜껑 내부가 흑백 점으로 부서짐(조각 2929),no
+challenge.jpg,dim + bright background,CLAHE,clipLimit=3.0,병뚜껑 홈이 가장 강조됨,병뚜껑 내부가 더 부서짐(조각 3855),no
+challenge.jpg,dim + bright background,None (최종 선택),-,원본 유지,병뚜껑과 배경이 함께 흰색 → 3일차에서 경계선·Contour로 확인,partly

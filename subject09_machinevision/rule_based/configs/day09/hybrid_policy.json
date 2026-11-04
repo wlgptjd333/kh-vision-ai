@@ -1,0 +1,16 @@
+{
+  "policy_version": "day09-hybrid-v2.0",
+  "dataset": "Day08 MVTec bottle common_query 20",
+  "positive_label": "Anomaly",
+  "policies": [
+    "OR",
+    "AND"
+  ],
+  "sources": {
+    "one_shot": "reports/day08_one_shot_results.csv",
+    "few_shot": "reports/day08_fewshot_results.csv",
+    "day08_audit": "reports/day09/day08_reproducibility_audit.json"
+  },
+  "version_manifest": "reports/day09/version_manifest.json",
+  "note": "실제 Day08 저장 예측의 결합; 새로운 CNN 학습은 수행하지 않음"
+}

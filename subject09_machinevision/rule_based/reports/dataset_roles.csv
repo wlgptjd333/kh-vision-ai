@@ -1,0 +1,7 @@
+folder,role,when_to_use,day01_contents
+data/calibration,검사 기준을 정하기 위한 데이터,정상 범위·Threshold 등을 결정할 때,비어 있음 (기준값은 2일차 이후 결정)
+data/train,AI 모델을 학습하기 위한 데이터,AI 모델을 사용하는 경우 (7~8일차),비어 있음
+data/validation,학습·설정 중간 비교,AI 모델이나 설정을 비교할 때,비어 있음
+data/test,확정된 방법의 최종 확인,기준을 정한 뒤 성능을 확인할 때 (기준값 결정에 사용하면 안 됨),비어 있음
+data/challenge,일부러 어려운 조건의 데이터,실패 조건을 찾아볼 때,비어 있음
+samples,오늘 빠르게 확인할 소량의 예제,1일차 ROI 실습,sample01~05.jpg · sample.mp4 · challenge_crown_cap/ (영상 Frame 8장)

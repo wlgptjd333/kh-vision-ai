@@ -1,0 +1,3 @@
+﻿experiment_id,changed_variable,old_value,new_value,homography_required,sift_good_matches_min,inlier_ratio_min,samples,accuracy,ng_precision,ng_recall,fp,fn
+EXP-001,none,,,True,129,0.8664,12,0.916667,0.857143,1.0,1,0
+EXP-002,inlier_ratio_min,0.8664,0.810811,True,129,0.810811,12,0.833333,0.833333,0.833333,1,1

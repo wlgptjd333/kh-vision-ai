@@ -1,0 +1,8 @@
+{
+    // 이 프로젝트의 가상환경을 기본 Python 인터프리터로 사용
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    // ▷ 실행 버튼으로 .py를 돌릴 때 터미널 위치를 프로젝트 최상위로 유지 (samples/ 같은 상대경로용)
+    "python.terminal.executeInFileDir": false,
+    // 노트북도 프로젝트 최상위를 기준 폴더로 실행
+    "jupyter.notebookFileRoot": "${workspaceFolder}"
+}

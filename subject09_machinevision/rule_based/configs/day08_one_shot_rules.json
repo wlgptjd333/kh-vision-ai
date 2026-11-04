@@ -1,0 +1,13 @@
+{
+  "baseline_version": "day08-one-shot-v1.0",
+  "dataset": "MVTec AD bottle",
+  "method": "one_reference_cosine_similarity",
+  "backbone": "resnet18_imagenet_pretrained",
+  "reference_count": 1,
+  "reference_file": "037.png",
+  "reference_path": "artifacts/day08/one_shot_reference.npy",
+  "calibration_count": 20,
+  "threshold_method": "normal_calibration_5_percentile",
+  "similarity_threshold": 0.9821046948432922,
+  "decision_rule": "similarity >= threshold => Normal"
+}

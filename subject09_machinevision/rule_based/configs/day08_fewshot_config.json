@@ -1,0 +1,10 @@
+{
+  "baseline_version": "day08-few-shot-v1.0",
+  "dataset": "MVTec AD bottle",
+  "method": "prototype_cosine_similarity",
+  "backbone": "resnet18_imagenet_pretrained",
+  "normal_support_count": 5,
+  "anomaly_support_count": 5,
+  "anomaly_support_type": "broken_small",
+  "decision_rule": "choose prototype with higher similarity"
+}

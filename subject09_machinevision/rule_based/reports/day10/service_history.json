@@ -1,0 +1,52 @@
+[
+  {
+    "request_id": "1060e6ef73b9",
+    "inspected_at": "2026-11-03T09:16:06",
+    "service_version": "day10-service-v1.0",
+    "inspection_module": "day06_ocr",
+    "rule_version": "day06-ocr-v1.0",
+    "file_name": "0637145699424_side.png",
+    "measurements": {
+      "ocr_text": "0637145699424",
+      "expected_text": "0637145699424",
+      "pattern_ok": true,
+      "expected_match": true
+    },
+    "final_decision": "OK",
+    "reasons": []
+  },
+  {
+    "request_id": "655a3f96ccec",
+    "inspected_at": "2026-11-03T09:16:18",
+    "service_version": "day10-service-v1.0",
+    "inspection_module": "day06_ocr",
+    "rule_version": "day06-ocr-v1.0",
+    "file_name": "0637145699424_side.png",
+    "measurements": {
+      "ocr_text": "0637145699424",
+      "expected_text": "0637145699424",
+      "pattern_ok": true,
+      "expected_match": true
+    },
+    "final_decision": "OK",
+    "reasons": []
+  },
+  {
+    "request_id": "d08d40a5225c",
+    "inspected_at": "2026-11-03T09:16:21",
+    "service_version": "day10-service-v1.0",
+    "inspection_module": "day06_ocr",
+    "rule_version": "day06-ocr-v1.0",
+    "file_name": "0679256889404_side.png",
+    "measurements": {
+      "ocr_text": "0679256889404",
+      "expected_text": "0679256889400",
+      "pattern_ok": true,
+      "expected_match": false
+    },
+    "final_decision": "NG",
+    "reasons": [
+      "NG_EXPECTED_MISMATCH"
+    ]
+  }
+]

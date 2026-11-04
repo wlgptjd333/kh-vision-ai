@@ -1,0 +1,41 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter 자동 백업 (교재 목록에 없어 추가)
+.ipynb_checkpoints/
+
+# Dataset
+data/
+samples/
+
+# 실행 결과
+outputs/
+
+# 모델
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# 영상
+*.mp4
+*.avi
+*.mov
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 환경설정
+.env
+
+# 2일차 Challenge 원본 사진 (crop_challenge.py 입력·백업)
+roi_temp/*.jpg
+
+# Day07 생성 Feature
+artifacts/day07/
+
+# Day08 생성 Feature
+artifacts/day08/
