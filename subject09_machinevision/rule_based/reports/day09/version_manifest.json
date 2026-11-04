@@ -1,0 +1,162 @@
+{
+  "created_at": "2026-11-03T09:18:12",
+  "git_commit": "ca50ab60e6db1e47ea0aac07fd06c6b8778cddc5",
+  "datasets": {
+    "day02_preprocess_input": {
+      "exists": true,
+      "file_count": 8,
+      "fingerprint": "0479656a70b011ecf7ef756ecb53bd0291773dd7e4a1949f77e6d818462fb8e7"
+    },
+    "day03_cap_inspection": {
+      "exists": true,
+      "file_count": 12,
+      "fingerprint": "b770ccd519162f5e717b5428fdd7e457a8732d1217eb1aed3b5cef286970e2f5"
+    },
+    "day04_logo_matching": {
+      "exists": true,
+      "file_count": 13,
+      "fingerprint": "c51fbbf7d677f0cc11c5ffb96ec932eab2c3f564e6bd7839dc8e16a9bef22fe2"
+    },
+    "day05_logo_calibration_test": {
+      "exists": true,
+      "file_count": 18,
+      "fingerprint": "ab41261719c342e7b7e16f449da178195fb9c583ea767b430bd8ed1471691f12"
+    },
+    "day06_ocr_product": {
+      "exists": true,
+      "file_count": 6,
+      "fingerprint": "0edfbcecc95a19433566ec12674cec23f17ef8835953131dc00f08a3aac33c34"
+    },
+    "day07_normal_test": {
+      "exists": true,
+      "file_count": 20,
+      "fingerprint": "55db4c1280273e153b54c6b22d5f14d46f9bdfe003e183a171217544d499186b"
+    },
+    "day08_common_query": {
+      "exists": true,
+      "file_count": 20,
+      "fingerprint": "67ff120e5ad336a85b4cc59a8cf21a1c5a5c0b8843f93a7bb6437bafe07fb377"
+    }
+  },
+  "configs": {
+    "configs/day05_logo_rules.json": {
+      "exists": true,
+      "size": 495,
+      "sha256": "1c94cbe5eb74a5510d8c49b1628b1a17e2c846d51fb99671b9ff9128ec9125ac"
+    },
+    "configs/day06_ocr_rules.json": {
+      "exists": true,
+      "size": 855,
+      "sha256": "45c87eaf639d1846f304e58478a26447f8309eecb9172a45e74b85f3d2319963"
+    },
+    "configs/day06_labels.csv": {
+      "exists": true,
+      "size": 369,
+      "sha256": "7f6af893ab0189bf2654f90fd9a3172c64fc29a6298b851b3ea198231341199f"
+    },
+    "configs/day07_anomaly_rules.json": {
+      "exists": true,
+      "size": 442,
+      "sha256": "60fbce95dca17b0eab348e1f242a77385d3935cdcb08822ac37d1ffd02f774f4"
+    },
+    "configs/day08_one_shot_rules.json": {
+      "exists": true,
+      "size": 475,
+      "sha256": "53ecc7ebb57b0d1d048c1218aa3435b5765e56286c328a5224931e8c16c720f5"
+    },
+    "configs/day08_fewshot_config.json": {
+      "exists": true,
+      "size": 331,
+      "sha256": "8f2ee3fb32634b5e3bd413d2aafcab4e2f6ec061d34288627edcb1acd2a2b60d"
+    }
+  },
+  "artifacts": {
+    "artifacts/day07/normal_reference.npz": {
+      "exists": true,
+      "size": 125864,
+      "sha256": "6d0667589c9c93ed81af991184c118d5afa8cb4a57631b0d364a14ac86c50726"
+    },
+    "artifacts/day08/one_shot_reference.npy": {
+      "exists": true,
+      "size": 2176,
+      "sha256": "ff598e94c068b7684e4133c5787c1b8105013cf6e6b534cf8efbc3fb54ce3232"
+    },
+    "artifacts/day08/fewshot_prototypes.npz": {
+      "exists": true,
+      "size": 4283,
+      "sha256": "6e0fd2d8e8a49f500091ec8785be30de389e0a51ceef8255579ed3228d3e98b9"
+    }
+  },
+  "result_sources": {
+    "reports/day01_problem_definition.md": {
+      "exists": true,
+      "size": 6891,
+      "sha256": "e13f3cd544e87bf8c34824d015bdda6d774359c577522ead722c5ff4722ef526"
+    },
+    "reports/day02_parameter_table.csv": {
+      "exists": true,
+      "size": 3891,
+      "sha256": "240b6a6bdc26fcc9c53a7ca460180af3f42d6308447c58dc66261ca89ddffceb"
+    },
+    "reports/day02_preprocess_reason.md": {
+      "exists": true,
+      "size": 9998,
+      "sha256": "57d229993545e7b86f317ea7dd0473a1009fd42a73dc55e2a1cfc31607e8872e"
+    },
+    "reports/day03_inspection_results.csv": {
+      "exists": true,
+      "size": 536,
+      "sha256": "d1dbabddc6ce0ef4366e7b712e59be21a34263681d483f45d8aa88e3a51166d0"
+    },
+    "reports/day04_homography_results.csv": {
+      "exists": true,
+      "size": 292,
+      "sha256": "a8dee9f3af48d9c02da52ee5c0e454040acdf608886cb3005799e81dbe2b5cac"
+    },
+    "reports/day05_calibration_measurements.csv": {
+      "exists": true,
+      "size": 594,
+      "sha256": "6fa8f9d02803fb134c08525c8380cb2b48188dc286fe465c89758837b2441f58"
+    },
+    "reports/day05_test_results.csv": {
+      "exists": true,
+      "size": 831,
+      "sha256": "c7af41a1af5a0dbf1aa5f959f07ae05c346c1e61bf007434a4dfc11f285e1ee2"
+    },
+    "reports/day06_ocr_results.csv": {
+      "exists": true,
+      "size": 953,
+      "sha256": "59391ba95af10eb3a0dbcd1d51cc450d1d8da4e7307b07c38f80bd82df69c10d"
+    },
+    "reports/day06_ocr_metrics.md": {
+      "exists": true,
+      "size": 286,
+      "sha256": "70c4ed647519cc225d52435657d02e925ac8b71c5146ab84dfc0b1c35e0174f6"
+    },
+    "reports/day07_anomaly_scores.csv": {
+      "exists": true,
+      "size": 8273,
+      "sha256": "65627c8cac0b630acc225dd9f75935d2f5591d7c8ae1c55d01402b6f54c4cb5b"
+    },
+    "reports/day07_test_metrics.md": {
+      "exists": true,
+      "size": 366,
+      "sha256": "6b51ae769417c6d45ea1b01d6a89e537ead26806ee1c4f3c1859fb05a4c8cf66"
+    },
+    "reports/day08_one_shot_results.csv": {
+      "exists": true,
+      "size": 1443,
+      "sha256": "da9c784bd250fd61b9506582d40745041520066a0cdc95f64c9883272c758123"
+    },
+    "reports/day08_fewshot_results.csv": {
+      "exists": true,
+      "size": 1455,
+      "sha256": "66f8b43e3f8ec066742913d4592dfea5d8d3e5de30a6480e618dd69feea1971e"
+    },
+    "reports/day08_method_comparison.csv": {
+      "exists": true,
+      "size": 144,
+      "sha256": "1d844714bb9336f92996a5fe71a82a0016059c74b9dfb12f5f804c6d441ceed0"
+    }
+  }
+}

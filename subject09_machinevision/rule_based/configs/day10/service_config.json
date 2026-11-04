@@ -1,0 +1,7 @@
+{
+  "service_name": "Subject9 Machine Vision Service",
+  "service_version": "day10-service-v1.0",
+  "inspection_module": "day06_ocr",
+  "history_limit": 100,
+  "allow_sample_inspection": true
+}

@@ -1,0 +1,36 @@
+{
+  "same_common_query": true,
+  "query_count": 20,
+  "all_metric_match": true,
+  "metrics": {
+    "one_shot": {
+      "samples": 20,
+      "accuracy": 0.85,
+      "anomaly_precision": 0.8888888888888888,
+      "anomaly_recall": 0.8,
+      "tp": 8,
+      "tn": 9,
+      "fp": 1,
+      "fn": 2
+    },
+    "few_shot": {
+      "samples": 20,
+      "accuracy": 0.9,
+      "anomaly_precision": 1.0,
+      "anomaly_recall": 0.8,
+      "tp": 8,
+      "tn": 10,
+      "fp": 0,
+      "fn": 2
+    }
+  },
+  "sha256": {
+    "configs/day08_one_shot_rules.json": "53ecc7ebb57b0d1d048c1218aa3435b5765e56286c328a5224931e8c16c720f5",
+    "configs/day08_fewshot_config.json": "8f2ee3fb32634b5e3bd413d2aafcab4e2f6ec061d34288627edcb1acd2a2b60d",
+    "artifacts/day08/one_shot_reference.npy": "ff598e94c068b7684e4133c5787c1b8105013cf6e6b534cf8efbc3fb54ce3232",
+    "artifacts/day08/fewshot_prototypes.npz": "6e0fd2d8e8a49f500091ec8785be30de389e0a51ceef8255579ed3228d3e98b9",
+    "reports/day08_one_shot_results.csv": "da9c784bd250fd61b9506582d40745041520066a0cdc95f64c9883272c758123",
+    "reports/day08_fewshot_results.csv": "66f8b43e3f8ec066742913d4592dfea5d8d3e5de30a6480e618dd69feea1971e",
+    "reports/day08_method_comparison.csv": "1d844714bb9336f92996a5fe71a82a0016059c74b9dfb12f5f804c6d441ceed0"
+  }
+}

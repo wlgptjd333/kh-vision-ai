@@ -1,0 +1,12 @@
+{
+  "experiment_id": "EXP-001",
+  "description": "Day05 frozen baseline",
+  "dataset_version": "day05_calibration_v1",
+  "source_rule_version": "day05-logo-v1.0",
+  "changed_variable": "none",
+  "required_rules": {
+    "homography_found": true,
+    "sift_good_matches_min": 129,
+    "inlier_ratio_min": 0.8664
+  }
+}

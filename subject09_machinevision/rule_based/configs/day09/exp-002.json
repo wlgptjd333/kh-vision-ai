@@ -1,0 +1,15 @@
+{
+  "experiment_id": "EXP-002",
+  "description": "Calibration-derived inlier ratio candidate",
+  "dataset_version": "day05_calibration_v1",
+  "source_rule_version": "day05-logo-v1.0",
+  "changed_variable": "inlier_ratio_min",
+  "required_rules": {
+    "homography_found": true,
+    "sift_good_matches_min": 129,
+    "inlier_ratio_min": 0.810811
+  },
+  "old_value": 0.8664,
+  "new_value": 0.810811,
+  "candidate_source": "minimum inlier_ratio among Day05 Calibration actual=OK"
+}
