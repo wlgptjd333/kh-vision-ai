@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+media/jobs/*
+!media/jobs/.gitkeep
+artifacts/*
+!artifacts/.gitkeep
+*.db
+dataset/

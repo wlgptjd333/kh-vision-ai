@@ -1,0 +1,62 @@
+{
+  "model_path": "microsoft/resnet-18",
+  "images": 10,
+  "poll_sec": 0.05,
+  "sequential": [
+    {
+      "mode": "sync",
+      "cache": "MISS",
+      "n": 10,
+      "accept_median_ms": 22.8,
+      "done_median_ms": 22.8,
+      "done_mean_ms": 22.5,
+      "inference_median_ms": 17.5,
+      "cache_hit_count": 0
+    },
+    {
+      "mode": "sync",
+      "cache": "HIT",
+      "n": 10,
+      "accept_median_ms": 1.5,
+      "done_median_ms": 1.5,
+      "done_mean_ms": 1.5,
+      "inference_median_ms": null,
+      "cache_hit_count": 10
+    },
+    {
+      "mode": "async",
+      "cache": "MISS",
+      "n": 10,
+      "accept_median_ms": 7.5,
+      "done_median_ms": 63.0,
+      "done_mean_ms": 63.2,
+      "inference_median_ms": 19.5,
+      "cache_hit_count": 0
+    },
+    {
+      "mode": "async",
+      "cache": "HIT",
+      "n": 10,
+      "accept_median_ms": 7.7,
+      "done_median_ms": 63.3,
+      "done_mean_ms": 63.5,
+      "inference_median_ms": null,
+      "cache_hit_count": 10
+    }
+  ],
+  "burst": [
+    {
+      "mode": "sync",
+      "requests": 10,
+      "accept_max_ms": 163.3,
+      "all_done_ms": 170.3
+    },
+    {
+      "mode": "async",
+      "requests": 10,
+      "accept_max_ms": 193.3,
+      "all_done_ms": 372.5
+    }
+  ],
+  "same_top1_sync_vs_async": "10/10"
+}
