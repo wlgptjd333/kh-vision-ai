@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>감정 기록 상세</h1>
+
+<div class="card">
+  <p>입력: {{ item.text }}</p>
+
+  <p>
+    상태:
+    <strong
+      id="analysis-status"
+      data-status-url="{{ url_for('item_status', item_id=item.id) }}"
+    >
+      {{ item.status }}
+    </strong>
+  </p>
+
+  {% if item.is_analyzing %}
+    <p>분석 중입니다. 완료 후 화면이 갱신됩니다.</p>
+
+  {% elif item.status == 'FAILED' %}
+    <p class="error">
+      분석 실패: {{ item.error_message }}.
+      Redis·Celery 로그를 확인하세요.
+    </p>
+
+  {% else %}
+    <p>라벨: {{ item.label }}</p>
+
+    <p>
+      점수:
+      {% if item.score is not none %}
+        {{ '%.4f'|format(item.score) }}
+      {% else %}
+        미분석
+      {% endif %}
+    </p>
+  {% endif %}
+</div>
+
+<a
+  class="btn"
+  href="{{ url_for('item_update_page', item_id=item.id) }}"
+>
+  수정
+</a>
+
+<a
+  class="btn"
+  href="{{ url_for('item_delete_page', item_id=item.id) }}"
+>
+  삭제
+</a>
+
+<a class="btn" href="{{ url_for('item_list') }}">
+  목록
+</a>
+
+{% if item.is_analyzing %}
+
+<script>
+  // 1. 상태 표시 HTML 요소 가져오기
+  const statusElement = document.getElementById("analysis-status");
+
+  // 2. HTML data 속성에서 상태 조회 URL 가져오기
+  const statusUrl = statusElement.dataset.statusUrl;
+
+  // 중복 요청 방지
+  let isChecking = false;
+
+  // 3. 2초마다 분석 상태 확인
+  const timer = setInterval(async () => {
+
+    if (isChecking) return;
+    isChecking = true;
+
+    try {
+      // FastAPI에 현재 작업 상태 요청
+      const response = await fetch(statusUrl, {
+        cache: "no-store"
+      });
+
+      // HTTP 오류 확인
+      if (!response.ok) {
+        clearInterval(timer);
+        statusElement.textContent = "상태 조회 실패";
+        return;
+      }
+
+      // JSON 응답 변환
+      const data = await response.json();
+
+      // 현재 상태 화면 갱신
+      statusElement.textContent = data.status || "UNKNOWN";
+
+      // 분석 완료 또는 실패 여부 확인
+      if (
+        data.status === "DONE" ||
+        data.status === "FAILED"
+      ) {
+        clearInterval(timer);
+        window.location.reload();
+      }
+
+    } catch (error) {
+      // 네트워크 오류 처리
+      clearInterval(timer);
+      statusElement.textContent = "상태 조회 오류";
+      console.error(error);
+
+    } finally {
+      isChecking = false;
+    }
+
+  }, 2000);
+</script>
+
+{% endif %}
+
+{% endblock %}
