@@ -1,0 +1,5 @@
+dataset/
+artifacts/
+media/
+.env
+.venv/
