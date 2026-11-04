@@ -1,0 +1,10 @@
+# 공통 — 각 하위 프로젝트의 .gitignore도 함께 적용됨
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.env
+*.pt
+*.safetensors
+*.onnx
+.DS_Store
+Thumbs.db
