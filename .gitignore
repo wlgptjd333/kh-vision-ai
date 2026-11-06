@@ -39,3 +39,6 @@ artifacts/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Generated Day02 pose tables
+reports/day02/tables/*.csv
