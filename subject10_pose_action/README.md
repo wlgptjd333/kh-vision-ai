@@ -10,6 +10,19 @@ uv sync
 source .venv/bin/activate
 ```
 
+## 데이터 (Git에 올리지 않음)
+
+강사님 저장소 [handgonpo/Vision_AI_Class](https://github.com/handgonpo/Vision_AI_Class)의 `교과10 자세추정/10일 수업/` 아래 `N일차 데이터/`에서 받아 넣습니다.
+
+| 위치 | 넣을 파일 |
+|---|---|
+| `data/day01/` | `coco8-pose.zip` (압축 풀기: `python -m zipfile -e data/day01/coco8-pose.zip data/day01/coco8_pose`) |
+| `data/day01/video/` | `solution_ci_pose_demo.mp4` |
+| `data/day02/images/` | `front.jpg` `arms_up.jpg` `side.jpg` `partial_body.jpg` `occlusion.jpg` `distance_far.jpg` |
+| `data/day02/videos/` | `pose_quality_demo.mp4` (= day01 영상 복사본) |
+
+`yolo11n-pose.pt`는 첫 실행 때 Ultralytics가 자동으로 받습니다.
+
 ## Day 01 - Pose 전체 구조·개발환경·실제 데이터 입력
 
 ### 사용한 입력
