@@ -1,0 +1,15 @@
+[project]
+name = "subject12-vicon-web"
+version = "0.1.0"
+description = "Subject 12 - VICON GLB -> FastAPI + Three.js viewer (Day 1) and webcam YOLO Pose comparison (Day 2)"
+requires-python = ">=3.11"
+dependencies = [
+    # Day 1: web server
+    "fastapi",
+    "uvicorn[standard]",
+    # Day 2: webcam pose + comparison
+    "numpy",
+    "opencv-python",
+    "ultralytics",
+    "torch",
+]
