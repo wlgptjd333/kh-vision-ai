@@ -86,6 +86,26 @@ JSON 형식은 노트 3번과 같습니다: `fps 30`, `bone_count 73`, `frames[]
 - D001↔D002처럼 비슷한 동작은 평균 차이가 8° 정도라 이 점수만으로는 구분이 어렵습니다. 동작 종류를 자동으로 맞히려면 여러 사람 데이터로 Random Forest 등을 따로 학습해야 합니다 (노트 4번 7장).
 - 손가락 Bone(73개 중 40개)은 YOLO Pose에 없어서 비교에 쓰지 않습니다.
 
+## 핸드폰 영상 Pose confidence (11/13)
+
+핸드폰으로 동작 17개를 앞·옆에서 찍은 영상(35개, 9번은 정면 재촬영 1개 추가)을 YOLO11n-pose(COCO 17)에 넣어
+사람 박스 conf와 관절 conf를 정리합니다. 교과10 2일차 `10_pose_video_quality.py`와 같은 흐름입니다.
+
+```bash
+uv run python scripts/video_confidence.py "/mnt/c/Users/user1/Downloads/혜성" [--save-video] [--stride 2]
+```
+
+| 결과 (`output/video_conf/`) | 내용 |
+|---|---|
+| `summary.csv` | 영상마다 동작 번호·앞/옆, 검출률, 박스 conf, 관절 conf 평균, conf 0.5 이상 비율, 가장 나빴던 시각·관절 |
+| `keypoints.csv` | 영상 × 관절 17개 평균 conf |
+| `frames/<영상>.csv` | 프레임마다 `mean_keypoint_conf`, `low_keypoint_count`, `lowest_keypoint` + 관절 17개 conf |
+| `samples/`, `videos/` | 뼈대와 conf를 그린 사진·영상 (초록 ≥0.8, 노랑 ≥0.5, 빨강 <0.5) |
+| `keypoint_conf.png` | 앞/옆 관절별 평균 conf 그래프 |
+
+- 앞/옆은 파일 이름(촬영 시각)으로 정합니다: 2분 안에 붙은 두 영상 = 한 동작(먼저 앞, 다음 옆), 짝 없는 영상 = 바로 앞 동작의 정면 재촬영.
+- 결과(혜성 35개): 정면 평균 0.93, 옆 0.84. 옆모습은 카메라 반대쪽 귀(0.22)·눈(0.38)·손목(0.75)이 낮고, 바닥에 눕는 동작은 정면도 0.8대.
+
 ## 점검
 
 ```bash
