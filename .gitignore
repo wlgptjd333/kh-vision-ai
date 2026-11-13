@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+# 촬영 원본에서 나온 큰 파일은 Git에 올리지 않음
+assets/*.glb
+output/
+*.pt
