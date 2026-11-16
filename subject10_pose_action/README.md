@@ -240,6 +240,28 @@ Keypoint 좌표를 그대로 쓰지 않고 몸의 위치·크기 차이를 줄�
 한 Frame의 자세를 38개의 숫자로 표현했다. 동작 구분에는 38개를 전부 보는 것보다
 그 동작을 설명하는 Feature를 고르는 것이 중요하다.
 
+### Mini Challenge (3팀, Sit vs Stand 정면)
+
+3팀 금요일 녹화 영상 `T03_S01_A07_T01_F`(매트에 앉기)를 다시 써서 12·14·16·18번을 수행.
+Far 사진은 같은 Frame을 50%로 줄여 만듦. 결과: [reports/day03/challenge/feature_design.md](reports/day03/challenge/feature_design.md)
+
+| 항목 | 결과 |
+|---|---|
+| 12 관절각도 | 무릎 L/R Sit 124° / 78° · Stand 173° / 175° |
+| 14 Near vs Far (Sit) | 픽셀 124.99 → 정규화 0.206 (접힌 다리를 작은 화면에서 다르게 찾음) |
+| 선택한 Feature | 무릎 각도 평균, knee_y, ankle_y |
+| 18 영상 (615 Frame) | knee_y 서 있음 1.06 → 앉아 유지 0.10 → 다시 1.08 |
+
+- 무릎 각도는 해석이 쉽지만 양반다리에서 좌우가 다르고 많이 흔들림(유지 구간 std 15.7°).
+  정규화된 무릎·발목 높이가 Near/Far·유지 구간 모두 가장 안정적.
+
+### 팀 프로젝트 준비 (3팀, 4일차 STEP 1~4 선작업)
+
+- `scripts/team03_01_build_manifest.py` — 팀 영상 136개 → clip_id(`T03_S##_A##_T##_{F|S}`)·Manifest
+- `scripts/team03_02_check_videos.py` — 모든 MP4 디코딩 검사 → `reports/team_projects/team03/tables/video_inventory.csv`
+- `scripts/team03_03_build_sequences.py` + `src/team_feature_utils.py` — Frame별 38-D + 3팀 Feature(상체 기울기·몸 상자 비율·골반 화면 위치) + 품질 정보
+- 참가자 실명 대응표·원본 영상·Frame별 CSV는 Git에 올리지 않음
+
 ### 다음 수업
 
 4일차에는 여러 Frame의 Feature를 시간 순서로 묶어 하나의 동작을 표현하는 **Sequence**로 확장한다.
