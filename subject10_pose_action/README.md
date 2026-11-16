@@ -187,3 +187,59 @@ reports/day02/challenge/
 
 3일차에는 2일차에서 확인한 Keypoint를 이용하여
 관절각도와 정규화된 Frame Feature를 만듭니다.
+
+## Day 03 - Joint Angle, Normalization & Frame Feature
+
+### 오늘 배운 내용
+
+- 세 Keypoint로 관절각도 계산 (팔꿈치·무릎 좌우 4개)
+- Hip Center 기준 몸 중심 이동 + Shoulder Width 기준 크기 정규화
+- Near / Far, Person A / Person B 정규화 전·후 비교
+- COCO Left / Right 기준과 Keypoint 좌우 반전
+- 34개 Normalized 좌표 + 4개 관절각도 = **38-D Frame Feature**
+- 동작을 설명하는 Feature 선택 (Arms Up: 손목 y − 어깨 y)
+- 영상의 각 Frame에서 38-D Feature 생성 → 시간에 따른 변화 확인
+
+### Day 03 핵심 흐름
+
+```text
+YOLO Pose → COCO 17 Keypoint + Confidence → 관절각도
+→ Hip Center → Shoulder Width Normalization
+→ Normalized 34 + Angle 4 = 38-D Frame Feature
+→ 영상의 각 Frame에 반복 → Sequence의 재료
+```
+
+### 오늘 추가한 주요 코드
+
+```text
+src/feature_utils.py
+scripts/11_check_day03_data.py ~ 18_video_frame_features.py
+```
+
+### 실행 결과 (11/16)
+
+| 항목 | 결과 |
+|---|---|
+| 12 관절각도 (arms_up_person_a) | 팔꿈치 L/R 132.50° / 125.38°, 무릎 174.53° / 173.54° |
+| 12 관절각도 (sit_pose) | 무릎 L/R 97.88° / 117.49° |
+| 14 Near vs Far | 픽셀 평균거리 131.05 → 정규화 0.1435 |
+| 14 Person A vs B | 69.40 → 0.3385 |
+| 15 좌우 반전 | Left vs Right 0.6086 → 반전 후 0.1207 |
+| 16 Frame Feature | 38개, 평균 Confidence 0.957 |
+| 17 Arms Up | person_a True / **sit_pose도 True (오탐)** |
+| 18 영상 Feature | 60 Frame 중 60 Valid, 왼팔꿈치 140.14° → 115.62° |
+
+- 교재의 `18_video_frame_features.py` 코드 칸에는 17번 코드가 잘못 들어가 있어서
+  교재 설명·결과에 맞춰 다시 작성함 (CSV: frame_id, time_sec, valid_pose, confidence 정보 + 38-D).
+- Arms Up 규칙(손목이 어깨보다 위)은 앉은 자세에서도 True가 나옴 →
+  Feature 한두 개로 만든 규칙은 쉽게 오탐하므로 Sequence·학습 모델이 필요한 이유.
+
+### 오늘 이해한 핵심
+
+Keypoint 좌표를 그대로 쓰지 않고 몸의 위치·크기 차이를 줄인 Normalized 좌표와 관절각도로
+한 Frame의 자세를 38개의 숫자로 표현했다. 동작 구분에는 38개를 전부 보는 것보다
+그 동작을 설명하는 Feature를 고르는 것이 중요하다.
+
+### 다음 수업
+
+4일차에는 여러 Frame의 Feature를 시간 순서로 묶어 하나의 동작을 표현하는 **Sequence**로 확장한다.
