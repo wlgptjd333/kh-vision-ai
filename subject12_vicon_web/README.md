@@ -106,6 +106,36 @@ uv run python scripts/video_confidence.py "/mnt/c/Users/user1/Downloads/혜성" 
 - 앞/옆은 파일 이름(촬영 시각)으로 정합니다: 2분 안에 붙은 두 영상 = 한 동작(먼저 앞, 다음 옆), 짝 없는 영상 = 바로 앞 동작의 정면 재촬영.
 - 결과(혜성 35개): 정면 평균 0.93, 옆 0.84. 옆모습은 카메라 반대쪽 귀(0.22)·눈(0.38)·손목(0.75)이 낮고, 바닥에 눕는 동작은 정면도 0.8대.
 
+## 핸드폰 영상 Pose 품질 (11/13 촬영)
+
+17개 동작을 핸드폰으로 앞·옆에서 찍은 영상 35개(9번 동작은 앞 재촬영 1개 추가)를 COCO 17 Keypoint로 돌려 confidence를 정리합니다. 교과10 2일차 `frame_quality.csv`와 같은 열을 씁니다.
+
+```bash
+uv run python scripts/video_confidence.py "/mnt/c/Users/user1/Downloads/혜성" --save-video
+```
+
+- `output/video_conf/summary.csv`: 동작 번호(촬영 시각으로 앞·옆 짝), 검출률, 박스 conf, 관절 conf 평균, 0.5 이상 비율, 가장 나쁜 시점
+- `output/video_conf/frames/<영상>.csv`: 프레임마다 `mean_keypoint_conf`, `low_keypoint_count`, `lowest_keypoint` + 관절 17개 conf
+- `output/video_conf/videos/`: 뼈대·conf를 그린 영상 (초록 ≥0.8, 노랑 0.5~0.8, 빨강 <0.5)
+- 결과: 앞 평균 0.93, 옆 0.84. 옆모습은 카메라 반대쪽 귀·눈·손목이 낮음.
+
+### YOLO vs MediaPipe (body-hero 설정)
+
+```bash
+uv run --with "mediapipe>=0.10.30,<0.11" python scripts/compare_mediapipe.py 영상폴더 \
+    --lite pose_landmarker.task --full pose_landmarker_full.task
+```
+
+| 모델 | 검출률 | 점수 평균 | 떨림(작을수록 안정) | 좌우 뒤바뀜 |
+|---|---|---|---|---|
+| YOLO11n-pose | 99.9% | 0.884 | 0.0155 | 0.7% |
+| MediaPipe Lite (480px) | 99.7% | 0.894 | 0.0051 | 0.15% |
+| MediaPipe Full (480px) | 99.7% | 0.898 | 0.0048 | 0.19% |
+
+- 점수는 YOLO conf와 MediaPipe visibility라 그대로 비교하면 안 됨 → 모델과 무관한 떨림(2차 차분 / 사람 키)도 같이 봄.
+- MediaPipe는 mediapipe를 프로젝트 의존성에 넣지 않고 `uv run --with`로 임시로만 씀.
+- WSL에 `libGLESv2.so.2`가 없으면: `apt download libgles2 && dpkg -x libgles2_*.deb ~/.local/mp_gles` 후 `LD_LIBRARY_PATH=~/.local/mp_gles/usr/lib/x86_64-linux-gnu`.
+
 ## 점검
 
 ```bash
