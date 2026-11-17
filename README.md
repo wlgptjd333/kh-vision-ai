@@ -260,6 +260,11 @@ Far 사진은 같은 Frame을 50%로 줄여 만듦. 결과: [reports/day03/chall
 - `scripts/team03_01_build_manifest.py` — 팀 영상 136개 → clip_id(`T03_S##_A##_T##_{F|S}`)·Manifest
 - `scripts/team03_02_check_videos.py` — 모든 MP4 디코딩 검사 → `reports/team_projects/team03/tables/video_inventory.csv`
 - `scripts/team03_03_build_sequences.py` + `src/team_feature_utils.py` — Frame별 38-D + 3팀 Feature(상체 기울기·몸 상자 비율·골반 화면 위치) + 품질 정보
+  - 11/17 추가: 몸 크기 정규화 좌표 `bn_*` 34개(몸통 길이와 어깨 폭/0.70 중 큰 값으로 나눔)와 사람 상자 `box_*`.
+    어깨 폭 정규화(38-D)는 측면 Frame의 54.6%에서 값이 5를 넘게 튀었고, 몸 크기 정규화는 정면·측면 모두 0.01% 미만
+  - 136개 전체 실행: 55,845 Frame, Pose 성공 99.9%
+- `scripts/team03_05_summarize_sequences.py` — 영상별 QA 요약(STEP 5) → `reports/team_projects/team03/tables/sequence_qa.csv`
+  - 자동 판정 PASS 112 · REVIEW 24 (화면 끝 닿음 10, 손목 가림 6, 다른 사람 잡힘 6, 사람 놓침 3 — 겹침 포함). RESHOOT·EXCLUDE는 사람이 보고 결정
 - 참가자 실명 대응표·원본 영상·Frame별 CSV는 Git에 올리지 않음
 
 ### 다음 수업

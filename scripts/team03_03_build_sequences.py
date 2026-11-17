@@ -10,6 +10,8 @@ from __future__ import annotations
 #   - 품질: pose_ok / feature_ok / fail_reason / 사람 수 / 관절별 Confidence / 기준 관절(어깨·골반) 상태
 #   - 원본 Keypoint 17×(x, y, conf) 를 따로 저장 (정규화로 위치 정보가 사라지지 않게)
 #   - 3팀 Feature: 상체 기울기·몸 상자 비율·골반 화면 위치 등 (src/team_feature_utils.py)
+#   - 몸 크기 정규화 좌표 bn_* 34개: 어깨 폭 정규화(38-D)가 측면·누운 자세에서 튀는 문제를 보완
+#   - 사람 상자(box_x1~y2): 화면 끝에 몸이 잘렸는지 QA 에서 확인
 #   - Confidence 가 낮다고 Frame 을 버리지 않고 상태만 기록
 #
 # 실행 (교재 순서: 1개 → 2~3개 → 같은 동작 여러 개 → 17개 대표 → 전체):
@@ -35,7 +37,8 @@ sys.path.insert(0, str(ROOT))
 from src.common import load_config, resolve_device  # noqa: E402
 from src.feature_utils import (LEFT_HIP, LEFT_SHOULDER, RIGHT_HIP, RIGHT_SHOULDER,  # noqa: E402
                                normalize_by_shoulder_width, selected_joint_angles)
-from src.team_feature_utils import SCALE_WARN_RATIO, TEAM03_FEATURE_NAMES, team03_features  # noqa: E402
+from src.team_feature_utils import (SCALE_WARN_RATIO, TEAM03_FEATURE_NAMES,  # noqa: E402
+                                    normalize_by_body_scale, team03_features)
 
 # 16번의 Feature 이름(38개)·관절 이름을 그대로 재사용
 _spec = importlib.util.spec_from_file_location("frame_feature16", ROOT / "scripts" / "16_make_frame_feature.py")
@@ -53,10 +56,14 @@ OUT_DIR = ROOT / "reports" / "team_projects" / "team03"
 META = ["clip_id", "subject_id", "action_id", "action_label", "view", "source_type",
         "frame_id", "time_sec", "fps", "img_w", "img_h",
         "pose_ok", "feature_ok", "fail_reason", "people_count", "box_conf",
+        "box_x1", "box_y1", "box_x2", "box_y2",
         "mean_keypoint_conf", "low_keypoint_count", "core_ok", "scale_warn",
-        "hip_center_x", "hip_center_y", "shoulder_width"]
+        "hip_center_x", "hip_center_y", "shoulder_width",
+        "body_feature_ok", "body_scale", "body_scale_src"]
 RAW = [f"raw_{n}_{k}" for n in KP_NAMES for k in ("x", "y", "c")]
-COLUMNS = META + FEATURE_NAMES + TEAM03_FEATURE_NAMES + RAW
+# 몸 크기(body scale) 정규화 좌표 34개: 측면·누운 자세에서도 값이 튀지 않음 (38-D 는 수업 형식 그대로 둠)
+BODY_NAMES = [f"bn_{n}_{k}" for n in KP_NAMES for k in ("x", "y")]
+COLUMNS = META + FEATURE_NAMES + BODY_NAMES + TEAM03_FEATURE_NAMES + RAW
 
 
 def parse_args():
@@ -71,7 +78,7 @@ def parse_args():
 
 def frame_row(result, img_w, img_h, kp_conf):
     """YOLO 결과 1개 → CSV 한 행에 들어갈 품질·Feature·원본 값 (첫 번째 = 가장 확실한 사람)"""
-    row = {"pose_ok": 0, "feature_ok": 0, "fail_reason": "", "people_count": 0}
+    row = {"pose_ok": 0, "feature_ok": 0, "body_feature_ok": 0, "fail_reason": "", "people_count": 0}
     kps = result.keypoints
     if kps is None or kps.xy is None or len(kps.xy) == 0:
         row["fail_reason"] = "no_person"
@@ -80,6 +87,8 @@ def frame_row(result, img_w, img_h, kp_conf):
     row["people_count"] = len(kps.xy)
     if result.boxes is not None and len(result.boxes):
         row["box_conf"] = round(float(result.boxes.conf[0]), 4)
+        for name, v in zip(("box_x1", "box_y1", "box_x2", "box_y2"), result.boxes.xyxy[0].cpu().numpy()):
+            row[name] = round(float(v), 1)
     xy = kps.xy[0].cpu().numpy()
     if kps.conf is not None:
         conf = kps.conf[0].cpu().numpy()
@@ -97,6 +106,15 @@ def frame_row(result, img_w, img_h, kp_conf):
     row.update(team)
     ratio = team["shoulder_ratio"]
     row["scale_warn"] = int(ratio != "" and ratio < SCALE_WARN_RATIO)
+
+    try:                                    # 몸 크기 정규화 (38-D 성공 여부와 따로 기록)
+        body_norm, b_scale, b_src = normalize_by_body_scale(xy)
+        if np.all(np.isfinite(body_norm)):
+            row.update(body_feature_ok=1, body_scale=round(b_scale, 2), body_scale_src=b_src)
+            for i, n in enumerate(KP_NAMES):
+                row[f"bn_{n}_x"], row[f"bn_{n}_y"] = round(float(body_norm[i, 0]), 6), round(float(body_norm[i, 1]), 6)
+    except ValueError:
+        pass
 
     try:
         normalized, center, scale = normalize_by_shoulder_width(xy)
@@ -165,6 +183,7 @@ def summarize(rows):
     n = len(rows)
     pose = sum(r["pose_ok"] for r in rows)
     feat = sum(r["feature_ok"] for r in rows)
+    body = sum(r["body_feature_ok"] for r in rows)
     core = sum(1 for r in rows if r["core_ok"] == 1)
     warn = sum(1 for r in rows if r["scale_warn"] == 1)
     multi = sum(1 for r in rows if r["people_count"] and r["people_count"] > 1)
@@ -175,6 +194,7 @@ def summarize(rows):
         gap = gap + 1 if not r["feature_ok"] else 0
         longest = max(longest, gap)
     return {"frames": n, "pose_ok_ratio": pose / n if n else 0, "feature_ok_ratio": feat / n if n else 0,
+            "body_ok_ratio": body / n if n else 0,
             "core_ok_ratio": core / n if n else 0, "scale_warn_ratio": warn / n if n else 0,
             "multi_person_frames": multi, "mean_conf": float(np.mean(confs)) if confs else float("nan"),
             "longest_gap": longest,
@@ -204,7 +224,7 @@ def main() -> None:
         print(f"[{i}/{len(clips)}] {clip['clip_id']} ({clip['action_label']}, {'정면' if clip['view'] == 'F' else '측면'})")
         print(f"  Frame {s['frames']} · Pose 성공 {s['pose_ok_ratio']:.1%} · Feature 성공 {s['feature_ok_ratio']:.1%}"
               f" · 어깨·골반 신뢰 {s['core_ok_ratio']:.1%} · 평균 Conf {s['mean_conf']:.3f}")
-        print(f"  어깨 폭 경고 {s['scale_warn_ratio']:.1%} · 여러 사람 Frame {s['multi_person_frames']}"
+        print(f"  몸 크기 정규화 성공 {s['body_ok_ratio']:.1%} · 어깨 폭 경고 {s['scale_warn_ratio']:.1%} · 여러 사람 Frame {s['multi_person_frames']}"
               f" · 최장 연속 실패 {s['longest_gap']} Frame · 상체 기울기 {s['tilt_min']}~{s['tilt_max']}°")
         print(f"  Saved: {out.relative_to(ROOT)}  ({len(COLUMNS)}열)")
 
