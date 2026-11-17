@@ -49,3 +49,11 @@ reports/team_projects/team03/videos/
 
 # Generated Day03 tables (challenge 포함)
 reports/day03/tables/*.csv
+
+# Generated Day04 results
+reports/day04/keyframes/*.jpg
+reports/day04/sequences/*.csv
+reports/day04/tables/*.csv
+reports/day04/challenge/keyframes/*.jpg
+reports/day04/challenge/sequences/*.csv
+reports/day04/challenge/challenge_sequence_summary.csv
