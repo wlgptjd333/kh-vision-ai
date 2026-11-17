@@ -43,9 +43,6 @@ Thumbs.db
 # Generated Day02 pose tables
 reports/day02/tables/*.csv
 
-# Team03 auto-generated outputs (per-frame CSVs, skeleton videos)
-reports/team_projects/team03/sequences/
-reports/team_projects/team03/videos/
 
 # Generated Day03 tables (challenge 포함)
 reports/day03/tables/*.csv
