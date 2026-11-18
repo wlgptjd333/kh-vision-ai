@@ -259,7 +259,7 @@ Far 사진은 같은 Frame을 50%로 줄여 만듦. 결과: [reports/day03/chall
 
 4일차 STEP 1~5(Manifest, 영상 검사, 136개 Sequence, 몸 크기 정규화, QA 요약)를 여기서 시작했고,
 2026-11-17 별도 저장소 [unmanned-store-anomaly](https://github.com/wlgptjd333/unmanned-store-anomaly)로 옮겼습니다.
-이전 기록은 커밋 `1f2afa1`, `3232372`에 있습니다.
+이전 기록은 커밋 `b3d6c32`, `3e0e9a5`에 있습니다.
 
 ### 다음 수업
 
