@@ -20,6 +20,8 @@ source .venv/bin/activate
 | `data/day01/video/` | `solution_ci_pose_demo.mp4` |
 | `data/day02/images/` | `front.jpg` `arms_up.jpg` `side.jpg` `partial_body.jpg` `occlusion.jpg` `distance_far.jpg` |
 | `data/day02/videos/` | `pose_quality_demo.mp4` (= day01 영상 복사본) |
+| `data/day04/videos/` | `4일차 데이터/` 의 6개 MP4 |
+| `data/day05/videos/S01~S03/` | `5일차 데이터/S01~S03/` 의 18개 MP4 (`S01_A001_T01.mp4` …) — 6일차도 이 데이터 사용 |
 
 `yolo11n-pose.pt`는 첫 실행 때 Ultralytics가 자동으로 받습니다.
 
@@ -264,3 +266,75 @@ Far 사진은 같은 Frame을 50%로 줄여 만듦. 결과: [reports/day03/chall
 ### 다음 수업
 
 4일차에는 여러 Frame의 Feature를 시간 순서로 묶어 하나의 동작을 표현하는 **Sequence**로 확장한다.
+
+## Day 04 - Action Clip을 Sequence 데이터로 만들기
+
+한 사람의 6개 동작 영상(bend_return, leg_raise_lower, walk_turn_walk, drink_return, sit_stand, wave)을
+Frame마다 38-D Feature로 바꾸고 시간 순서로 묶어 동작 하나 = Sequence 하나로 저장했습니다.
+
+| 항목 | 결과 |
+|---|---|
+| 영상 | 6개, 25fps, 85~266 Frame |
+| Pose 성공 | 6개 모두 100%, 평균 Confidence 0.89~0.97 |
+| Frame 간 Feature 변화 평균 | 0.10~0.22, **walk_turn_walk 만 17.48** (교재 17.18) |
+
+- walk_turn_walk 는 몸을 돌리는 순간 어깨가 겹쳐 어깨 폭이 0 에 가까워지고, 그걸로 나눈 정규화 값이 튑니다.
+  3팀 측면 영상에서 본 현상과 같아서, 3팀은 몸 크기 정규화를 따로 만들었습니다.
+- 코드: `scripts/19_check_day04_data.py` ~ `24_inspect_sequence_stages.py`, 결과: `reports/day04/tables/`
+
+## Day 05 - 18개 Action Clip을 Keypoint Dataset으로 만들고 Subject-wise Split
+
+강사님 제공 18개 MP4(3명 × 6동작)를 원본 Keypoint Dataset → 자동 QA → Human QA → Approved → 사람 단위 Split 으로 처리했습니다.
+요약: [reports/day05/day05_summary.md](reports/day05/day05_summary.md)
+
+```text
+25 영상 검사 → 26 YOLO Keypoint(Pixel·Image Normalized·Confidence) → 27 자동 QA
+→ 28 Human QA 확인 → 29 Approved Manifest → 30 Subject-wise Split → 31 Leakage 검사
+→ 32 Frame 무작위 분할의 Leakage 체험
+```
+
+| 항목 | 결과 |
+|---|---|
+| 자동 QA | AUTO_PASS 13 · CHECK 5 (S02 A001~A005, 교재와 같음) |
+| CHECK 원인 | 오른쪽 옷걸이의 외투를 사람으로 검출 (conf 0.26~0.72) → 실제 1명, 동작 정상 |
+| Human QA | 18개 모두 장면 확인 후 PASS (근거는 `human_note`) |
+| Split | Train S01 · Validation S02 · Test S03 (각 6개, 6동작 모두) |
+| Leakage | Subject·Clip 겹침 없음 / Frame 무작위 분할은 18개 Clip 모두 겹침 |
+
+- 교재 설명은 AUTO_PASS 를 UNREVIEWED 로 둬도 된다고 하지만, 교재 28·29번 코드는 PASS 만 승인합니다.
+  그래서 교재 23.7 대로 18개 전부 사람이 확인해 PASS 로 기록했습니다.
+
+## Day 06 - Action Recognition Baseline 성능평가
+
+길이가 다른 Clip 을 30단계로 보간해 30 × 38 = 1,140개 Feature 로 만들고 Random Forest 로 6개 동작을 분류했습니다.
+요약: [reports/day06/day06_summary.md](reports/day06/day06_summary.md) · Mini Challenge: [reports/day06/challenge/mini_challenge_result.md](reports/day06/challenge/mini_challenge_result.md)
+
+| 실험 | Validation S02 (이 PC) | 교재 |
+|---|---:|---:|
+| Baseline (30 Step, 좌표 + 각도) | 0.5000 (3/6) | 0.6667 |
+| Static (가운데 Frame 1개) | 0.6667 | 0.6667 |
+| 좌표만 (각도 제외) | 1.0000 | 1.0000 |
+| Mini Challenge: 15 Step | 0.6667 | — |
+| **Test S03 (마지막 1회)** | **1.0000 (6/6)** | — |
+
+- 오분류는 walk_turn_walk → leg_raise_lower, drink_return ↔ wave (팔을 머리 높이로 올리는 동작끼리). 확신도 0.21~0.23.
+- **교재와 다른 이유:** Train 이 6개뿐이라 Random Forest 난수(`random_state`)만 0~19 로 바꿔도
+  Validation 이 0.50~1.00 (평균 0.78) 으로 흔들립니다. 교재 0.67 과 이 PC 0.50 모두 이 범위 안입니다.
+- 그래서 Static·각도 제외·15 Step 이 "낫다"고 결론 내리지 않고 Baseline 설정을 유지했습니다.
+  같은 비교를 3팀 170개 영상으로 하면 Sequence 가 Static 보다 분명히 높습니다(74% vs 57%).
+
+```bash
+python scripts/33_check_day06_inputs.py
+python scripts/34_build_sequence_dataset.py
+python scripts/35_train_rf_baseline.py
+python scripts/36_evaluate_validation.py
+python scripts/37_analyze_misclassified.py
+python scripts/38_compare_static_vs_sequence.py
+python scripts/39_compare_feature_sets.py
+python scripts/41_day06_mini_challenge.py   # Mini Challenge + 난수 민감도 (Test 안 씀)
+python scripts/40_evaluate_test.py          # Test 는 마지막에 한 번
+```
+
+### 다음 수업
+
+7일차에는 실시간 Frame 을 모아 Sliding Window 를 만들고 실시간 Action Recognition 으로 연결한다.

@@ -1,0 +1,3 @@
+﻿experiment,sequence_steps,feature_count,n_estimators,max_depth,val_accuracy,val_macro_f1,misclassified
+baseline_30,30,1140,300,,0.5,0.4444,3
+steps_15,15,570,300,,0.6667,0.5833,2

@@ -1,0 +1,7 @@
+﻿clip_id,true_label,pred_label_baseline_30,pred_label_steps_15,confidence_baseline_30,confidence_steps_15
+S02_A001_T01,bend_return,bend_return,bend_return,0.2967,0.2967
+S02_A002_T01,leg_raise_lower,leg_raise_lower,leg_raise_lower,0.32,0.3167
+S02_A003_T01,walk_turn_walk,leg_raise_lower,leg_raise_lower,0.2133,0.2
+S02_A004_T01,drink_return,wave,leg_raise_lower,0.2267,0.2133
+S02_A005_T01,sit_stand,sit_stand,sit_stand,0.3167,0.3567
+S02_A006_T01,wave,drink_return,wave,0.22,0.2367
