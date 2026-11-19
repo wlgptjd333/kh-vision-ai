@@ -231,8 +231,9 @@ scripts/11_check_day03_data.py ~ 18_video_frame_features.py
 | 17 Arms Up | person_a True / **sit_pose도 True (오탐)** |
 | 18 영상 Feature | 60 Frame 중 60 Valid, 왼팔꿈치 140.14° → 115.62° |
 
-- 교재의 `18_video_frame_features.py` 코드 칸에는 17번 코드가 잘못 들어가 있어서
-  교재 설명·결과에 맞춰 다시 작성함 (CSV: frame_id, time_sec, valid_pose, confidence 정보 + 38-D).
+- 처음 받은 교재의 `18_video_frame_features.py` 코드 칸에는 17번 코드가 잘못 들어가 있어서
+  교재 설명·결과에 맞춰 직접 작성했었음. 11/19 수정 교재의 18번 코드로 바꾸고 다시 실행 →
+  60 Frame·38개 Feature 값이 직접 작성본과 같음 (직접 작성본에만 있던 hip_center_x·y, shoulder_width 3열은 빠짐).
 - Arms Up 규칙(손목이 어깨보다 위)은 앉은 자세에서도 True가 나옴 →
   Feature 한두 개로 만든 규칙은 쉽게 오탐하므로 Sequence·학습 모델이 필요한 이유.
 
