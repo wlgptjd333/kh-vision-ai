@@ -340,8 +340,9 @@ python scripts/40_evaluate_test.py          # Test 는 마지막에 한 번
 
 ![4~6일차 Action Recognition 학습 파이프라인](docs/day04-06_training_pipeline.png)
 
-앞 단계의 출력이 다음 단계의 입력이 되는 순서만 그렸습니다 (26 → 30 → 34 → 35 → 36 / 40).
-QA·확인·실험 스크립트(19~24, 25·28·31·33, 27~29, 32, 37~39, 41)는 학습 데이터를 바꾸지 않아서 뺐습니다.
+앞 단계의 출력이 다음 단계의 입력이 되는 순서대로 그렸습니다 (26 → 29 → 30 → 31 → 34 → 35 → 36 → 40).
+29번은 27·28 QA 결과표에서 PASS만 골라 학습 목록을 만들고, 31번은 split 겹침을 검사해 문제가 있으면 멈춥니다.
+27·28 QA, 25·33 입력 확인, 32 데모, 37~39 비교 실험, 41 Mini Challenge 는 학습 데이터를 만들거나 바꾸지 않아서 뺐습니다.
 원본은 draw.io 로 열 수 있습니다: [docs/day04-06_training_pipeline.drawio](docs/day04-06_training_pipeline.drawio)
 
 ### 다음 수업
