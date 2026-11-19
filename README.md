@@ -336,6 +336,14 @@ python scripts/41_day06_mini_challenge.py   # Mini Challenge + 난수 민감도 
 python scripts/40_evaluate_test.py          # Test 는 마지막에 한 번
 ```
 
+### 4~6일차 모델 학습 파이프라인
+
+![4~6일차 Action Recognition 학습 파이프라인](docs/day04-06_training_pipeline.png)
+
+앞 단계의 출력이 다음 단계의 입력이 되는 순서만 그렸습니다 (26 → 30 → 34 → 35 → 36 / 40).
+QA·확인·실험 스크립트(19~24, 25·28·31·33, 27~29, 32, 37~39, 41)는 학습 데이터를 바꾸지 않아서 뺐습니다.
+원본은 draw.io 로 열 수 있습니다: [docs/day04-06_training_pipeline.drawio](docs/day04-06_training_pipeline.drawio)
+
 ### 다음 수업
 
 7일차에는 실시간 Frame 을 모아 Sliding Window 를 만들고 실시간 Action Recognition 으로 연결한다.
